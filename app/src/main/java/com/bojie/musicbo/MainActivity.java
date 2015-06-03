@@ -16,7 +16,14 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.ArrayList;
+
+import static com.bojie.musicbo.KEYS.*;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -39,26 +46,75 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void getSearchJSON(String url) throws IOException {
 
-        OkHttpClient client = new OkHttpClient();
+        if (Utils.isNetworkAvailable(this)) {
 
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
+            OkHttpClient client = new OkHttpClient();
 
-        Call call = client.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                Toast.makeText(MainActivity.this, "Opps", Toast.LENGTH_SHORT).show();
-                mJSONResponse = "Opps";
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+
+            Call call = client.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Request request, IOException e) {
+                    Toast.makeText(MainActivity.this, "Opps", Toast.LENGTH_SHORT).show();
+                    mJSONResponse = "Opps";
+                }
+
+                @Override
+                public void onResponse(Response response) throws IOException {
+                    mJSONResponse = response.body().string();
+                    if (response.isSuccessful()) {
+                        parseJSONData(mJSONResponse);
+                    }
+
+                }
+            });
+
+        } else {
+            Toast.makeText(this, getString(R.string.network_unavailable_message),
+                    Toast.LENGTH_LONG).show();
+        }
+
+
+    }
+
+    private void parseJSONData(String response) {
+
+        ArrayList<Music> listMusics = new ArrayList<>();
+        if (response != null && response.length() > 0) {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                JSONObject artistsObject = jsonObject.getJSONObject(KEY_ARTISTS);
+                JSONArray arrayMusic = artistsObject.getJSONArray(KEY_ITEMS);
+                for (int i = 0; i < arrayMusic.length(); i++) {
+                    String id = NA;
+                    String name = NA;
+                    String urlThumbnail = NA;
+                    JSONObject currentMusic = arrayMusic.getJSONObject(i);
+
+                    if (Utils.contains(currentMusic, KEY_NAME)) {
+                        name = currentMusic.getString(KEY_NAME);
+                    }
+                    if (Utils.contains(currentMusic, KEY_ID)) {
+                        id = currentMusic.getString(KEY_ID);
+                    }
+
+                    // Summary
+
+                    Music music = new Music();
+                    music.setId(id);
+                    music.setName(name);
+
+                    if (!id.equals(NA) && !name.equals(NA)) {
+                        listMusics.add(music);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                mJSONResponse = response.body().string();
-
-            }
-        });
+        }
 
     }
 

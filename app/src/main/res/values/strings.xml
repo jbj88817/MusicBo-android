@@ -6,4 +6,5 @@
     <string name="desc_iv_thumbnail">thumbnail</string>
     <string name="title_activity_top10_tracks">Top 10 Tracks</string>
     <string name="btn_search">Search</string>
+    <string name="network_unavailable_message">Network is unavailable!</string>
 </resources>
