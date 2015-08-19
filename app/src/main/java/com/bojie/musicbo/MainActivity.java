@@ -23,14 +23,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static com.bojie.musicbo.KEYS.*;
+import static com.bojie.musicbo.Constant.*;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     EditText mEditTextSearch;
     Button mSearchButton;
-    public static final String UrlSearchBasic = "https://api.spotify.com/v1/search?q=";
-    public static final String UrlSearchTypeArtist = "&type=artist";
+
     private String mJSONResponse = "";
 
     @Override
