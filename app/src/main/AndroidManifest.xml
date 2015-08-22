@@ -24,6 +24,9 @@
             android:label="@string/title_activity_top10_tracks"
             android:parentActivityName=".MainActivity">
         </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
 
 </manifest>
