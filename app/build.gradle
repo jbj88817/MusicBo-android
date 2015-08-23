@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.0"
 
     defaultConfig {
         applicationId "com.bojie.musicbo"
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
@@ -28,14 +28,14 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:appcompat-v7:23.0.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     // Uses this to create RESTful Requests
     compile 'com.squareup.okhttp:okhttp:2.2.0'
     // Uses this to create HTTP connections
-    compile 'com.android.support:recyclerview-v7:22.2.1'
-    compile 'com.android.support:design:22.2.1'
+    compile 'com.android.support:recyclerview-v7:23.0.0'
+    compile 'com.android.support:design:23.0.0'
     compile(name:'spotify-web-api-android-0.1.1', ext:'aar')
     compile 'com.spotify.sdk:spotify-auth:1.0.0-beta10@aar'
 }
