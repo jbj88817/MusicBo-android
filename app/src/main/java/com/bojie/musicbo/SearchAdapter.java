@@ -46,6 +46,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             viewHolderMusic.musicSearchResult.setText(currentMusic.getName());
             Picasso.with(mContext)
                     .load(currentMusic.getUrlThumbnail())
+                    .placeholder(R.drawable.no_image_available)
                     .into(viewHolderMusic.musicThumbnail);
         }
     }

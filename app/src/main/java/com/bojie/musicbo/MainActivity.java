@@ -1,7 +1,10 @@
 package com.bojie.musicbo;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,8 +23,10 @@ import kaaes.spotify.webapi.android.models.Pager;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    EditText mEditTextSearch;
-    Button mSearchButton;
+    private EditText mEditTextSearch;
+    private Button mSearchButton;
+    private RecyclerView mSearchLists;
+    private SearchAdapter mSearchAdapter;
 
     SpotifyService mSpotify;
 
@@ -35,6 +40,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mEditTextSearch = (EditText) findViewById(R.id.et_search);
         mSearchButton = (Button) findViewById(R.id.btn_search);
         mSearchButton.setOnClickListener(this);
+        mSearchLists = (RecyclerView) findViewById(R.id.listSearch);
+        mSearchAdapter = new SearchAdapter(this);
+        mSearchLists.setAdapter(mSearchAdapter);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        mSearchLists.setLayoutManager(layoutManager);
+
 
         SpotifyApi api = new SpotifyApi();
         mSpotify = api.getService();
@@ -42,27 +54,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private void searchAndGetArtists(String keyWord){
-        ArrayList<Music> listMovies = new ArrayList<>();
-        ArtistsPager artistsPager = mSpotify.searchArtists(keyWord);
-        Pager<Artist> PagerArtists = artistsPager.artists;
-        List<Artist> artistList = PagerArtists.items;
-
-        for (Artist artist: artistList) {
-            String name = artist.name;
-            String id = artist.id;
-            List<Image> listOfImage = artist.images;
-            String ImageUri = listOfImage.get(2).url;
-
-            // setter
-            Music music = new Music();
-            music.setId(id);
-            music.setName(name);
-            music.setUrlThumbnail(ImageUri);
-            listMovies.add(music);
-        }
+    private void searchAndGetArtists(String keyWord) {
 
 
+        new AsyncTask<String, Void, Void>() {
+            ArrayList<Music> listMusic = new ArrayList<>();
+            @Override
+            protected Void doInBackground(String... keyWord) {
+
+
+                ArtistsPager artistsPager = mSpotify.searchArtists(keyWord[0]);
+                Pager<Artist> PagerArtists = artistsPager.artists;
+                List<Artist> artistList = PagerArtists.items;
+                String dummyImageUri = "";
+
+                for (Artist artist : artistList) {
+                    Music music = new Music();
+                    String name = artist.name;
+                    String id = artist.id;
+                    music.setId(id);
+                    music.setName(name);
+                    List<Image> listOfImage = artist.images;
+                    if (listOfImage.size() > 0 && listOfImage.get(2) != null){
+                        String ImageUri = listOfImage.get(2).url;
+                        music.setUrlThumbnail(ImageUri);
+                        dummyImageUri = ImageUri;
+                    } else {
+                        music.setUrlThumbnail(dummyImageUri);
+                    }
+                    listMusic.add(music);
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                mSearchAdapter.setMusics(listMusic);
+            }
+        }.execute(keyWord);
     }
 
 
@@ -164,7 +195,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-
+        int id = view.getId();
+        if (id == R.id.btn_search) {
+            String keyWord = mEditTextSearch.getText().toString();
+            searchAndGetArtists(keyWord);
+        }
     }
 
 //    @Override
