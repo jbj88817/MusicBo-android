@@ -9,41 +9,27 @@ import android.os.Parcelable;
 public class Music implements Parcelable {
 
     private String id;
-    private String name;
-    private String urlThumbnail;
-
-    public Music() {
-
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUrlThumbnail() {
-        return urlThumbnail;
-    }
-
-    public void setUrlThumbnail(String urlThumbnail) {
-        this.urlThumbnail = urlThumbnail;
-    }
+    private String artistName;
+    private String trackName;
+    private String albumName;
+    private String urlLargeThumbnail;
+    private String urlSmallThumbnail;
+    private String urlArtistThumbnail;
+    private String urlPreview;
 
     protected Music(Parcel in) {
         id = in.readString();
-        name = in.readString();
-        urlThumbnail = in.readString();
+        artistName = in.readString();
+        trackName = in.readString();
+        albumName = in.readString();
+        urlLargeThumbnail = in.readString();
+        urlSmallThumbnail = in.readString();
+        urlArtistThumbnail = in.readString();
+        urlPreview = in.readString();
+    }
+
+    public Music() {
+
     }
 
     @Override
@@ -54,8 +40,13 @@ public class Music implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
-        dest.writeString(name);
-        dest.writeString(urlThumbnail);
+        dest.writeString(artistName);
+        dest.writeString(trackName);
+        dest.writeString(albumName);
+        dest.writeString(urlLargeThumbnail);
+        dest.writeString(urlSmallThumbnail);
+        dest.writeString(urlArtistThumbnail);
+        dest.writeString(urlPreview);
     }
 
     @SuppressWarnings("unused")
@@ -70,4 +61,68 @@ public class Music implements Parcelable {
             return new Music[size];
         }
     };
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getArtistName() {
+        return artistName;
+    }
+
+    public void setArtistName(String artistName) {
+        this.artistName = artistName;
+    }
+
+    public String getTrackName() {
+        return trackName;
+    }
+
+    public void setTrackName(String trackName) {
+        this.trackName = trackName;
+    }
+
+    public String getAlbumName() {
+        return albumName;
+    }
+
+    public void setAlbumName(String albumName) {
+        this.albumName = albumName;
+    }
+
+    public String getUrlLargeThumbnail() {
+        return urlLargeThumbnail;
+    }
+
+    public void setUrlLargeThumbnail(String urlLargeThumbnail) {
+        this.urlLargeThumbnail = urlLargeThumbnail;
+    }
+
+    public String getUrlSmallThumbnail() {
+        return urlSmallThumbnail;
+    }
+
+    public void setUrlSmallThumbnail(String urlSmallThumbnail) {
+        this.urlSmallThumbnail = urlSmallThumbnail;
+    }
+
+    public String getUrlPreview() {
+        return urlPreview;
+    }
+
+    public void setUrlPreview(String urlPreview) {
+        this.urlPreview = urlPreview;
+    }
+
+    public String getUrlArtistThumbnail() {
+        return urlArtistThumbnail;
+    }
+
+    public void setUrlArtistThumbnail(String urlArtistThumbnail) {
+        this.urlArtistThumbnail = urlArtistThumbnail;
+    }
 }

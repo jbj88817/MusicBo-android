@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private SpotifyService mSpotify;
 
-    //private String mJSONResponse = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +54,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mListMusic = new ArrayList<>();
 
+        if (savedInstanceState != null) {
+            mListMusic = savedInstanceState.getParcelableArrayList(getString(R.string.STATE_MUSIC));
+        } else {
+           // Todo
+        }
+        mSearchAdapter.setMusics(mListMusic);
+
+    }
+
+    public void resetSearchList() {
+        if (mListMusic.size() != 0){
+            mSearchAdapter.setMusics(mListMusic);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(getString(R.string.STATE_MUSIC), mListMusic);
     }
 
 
@@ -73,17 +91,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 for (Artist artist : artistList) {
                     Music music = new Music();
-                    String name = artist.name;
+                    String artistName = artist.name;
                     String id = artist.id;
                     music.setId(id);
-                    music.setName(name);
+                    music.setArtistName(artistName);
                     List<Image> listOfImage = artist.images;
                     if (listOfImage.size() > 0 && listOfImage.get(2) != null){
                         String ImageUri = listOfImage.get(2).url;
-                        music.setUrlThumbnail(ImageUri);
+                        music.setUrlArtistThumbnail(ImageUri);
                         dummyImageUri = ImageUri;
                     } else {
-                        music.setUrlThumbnail(dummyImageUri);
+                        music.setUrlArtistThumbnail(dummyImageUri);
                     }
                     mListMusic.add(music);
                 }

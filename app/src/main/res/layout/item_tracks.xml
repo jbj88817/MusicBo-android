@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/iv_thumbnail_tracks"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_gravity="center_vertical"
         android:contentDescription="@string/desc_iv_thumbnail"
         android:layout_marginLeft="32dp"
@@ -22,8 +22,8 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_album"
-            style="?android:attr/textAppearanceMedium"
+            android:id="@+id/tv_track"
+            style="?android:attr/textAppearanceSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -32,8 +32,8 @@
             tools:text="A sky full of stars"/>
 
         <TextView
-            android:id="@+id/tv_track"
-            style="?android:attr/textAppearanceMedium"
+            android:id="@+id/tv_album"
+            style="?android:attr/textAppearanceSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

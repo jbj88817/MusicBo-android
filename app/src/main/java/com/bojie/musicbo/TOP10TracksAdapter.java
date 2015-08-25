@@ -15,14 +15,14 @@ import java.util.ArrayList;
 /**
  * Created by bojiejiang on 8/23/15.
  */
-public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolderMusic> {
+public class Top10TracksAdapter extends RecyclerView.Adapter<Top10TracksAdapter.ViewHolderMusic> {
 
     private ArrayList<Music> mMusics = new ArrayList<>();
     private LayoutInflater mInflater;
     private Context mContext;
 
 
-    public SearchAdapter(Context context) {
+    public Top10TracksAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
         mContext = context;
     }
@@ -34,7 +34,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     @Override
     public ViewHolderMusic onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = mInflater.inflate(R.layout.item_search, viewGroup, false);
+        View view = mInflater.inflate(R.layout.item_tracks, viewGroup, false);
         ViewHolderMusic viewHolder = new ViewHolderMusic(view);
         return viewHolder;
     }
@@ -43,9 +43,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public void onBindViewHolder(ViewHolderMusic viewHolderMusic, int position) {
         Music currentMusic = mMusics.get(position);
         if (currentMusic != null) {
-            viewHolderMusic.musicSearchResult.setText(currentMusic.getArtistName());
+            viewHolderMusic.trackTextView.setText(currentMusic.getTrackName());
+            viewHolderMusic.albumTextView.setText(currentMusic.getAlbumName());
             Picasso.with(mContext)
-                    .load(currentMusic.getUrlArtistThumbnail())
+                    .load(currentMusic.getUrlSmallThumbnail())
                     .placeholder(R.drawable.no_image_available)
                     .into(viewHolderMusic.musicThumbnail);
         }
@@ -58,13 +59,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     static class ViewHolderMusic extends RecyclerView.ViewHolder {
         ImageView musicThumbnail;
-        TextView musicSearchResult;
+        TextView trackTextView;
+        TextView albumTextView;
 
         public ViewHolderMusic(View itemView) {
             super(itemView);
-            musicThumbnail = (ImageView) itemView.findViewById(R.id.iv_thumbnail);
-            musicSearchResult = (TextView) itemView.findViewById(R.id.tv_search_result);
+            musicThumbnail = (ImageView) itemView.findViewById(R.id.iv_thumbnail_tracks);
+            trackTextView = (TextView) itemView.findViewById(R.id.tv_track);
+            albumTextView = (TextView) itemView.findViewById(R.id.tv_album);
         }
     }
-
 }
