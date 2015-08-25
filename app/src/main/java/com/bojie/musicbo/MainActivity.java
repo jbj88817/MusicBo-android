@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mSearchButton;
     private RecyclerView mSearchLists;
     private SearchAdapter mSearchAdapter;
+    private ArrayList<Music> mListMusic;
 
     SpotifyService mSpotify;
 
@@ -51,14 +53,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SpotifyApi api = new SpotifyApi();
         mSpotify = api.getService();
 
+        mListMusic = new ArrayList<>();
+
     }
 
 
     private void searchAndGetArtists(String keyWord) {
 
-
         new AsyncTask<String, Void, Void>() {
-            ArrayList<Music> listMusic = new ArrayList<>();
+
             @Override
             protected Void doInBackground(String... keyWord) {
 
@@ -82,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     } else {
                         music.setUrlThumbnail(dummyImageUri);
                     }
-                    listMusic.add(music);
+                    mListMusic.add(music);
                 }
 
                 return null;
@@ -91,85 +94,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                mSearchAdapter.setMusics(listMusic);
+                mSearchAdapter.setMusics(mListMusic);
             }
         }.execute(keyWord);
     }
 
 
-//    private void getSearchJSON(String url) throws IOException {
-//
-//        if (Utils.isNetworkAvailable(this)) {
-//
-//            OkHttpClient client = new OkHttpClient();
-//
-//            Request request = new Request.Builder()
-//                    .url(url)
-//                    .build();
-//
-//            Call call = client.newCall(request);
-//            call.enqueue(new Callback() {
-//                @Override
-//                public void onFailure(Request request, IOException e) {
-//                    Toast.makeText(MainActivity.this, "Opps", Toast.LENGTH_SHORT).show();
-//                    mJSONResponse = "Opps";
-//                }
-//
-//                @Override
-//                public void onResponse(Response response) throws IOException {
-//                    mJSONResponse = response.body().string();
-//                    if (response.isSuccessful()) {
-//                        parseJSONData(mJSONResponse);
-//                    }
-//
-//                }
-//            });
-//
-//        } else {
-//            Toast.makeText(this, getString(R.string.network_unavailable_message),
-//                    Toast.LENGTH_LONG).show();
-//        }
-//
-//
-//    }
-//
-//    private void parseJSONData(String response) {
-//
-//        ArrayList<Music> listMusics = new ArrayList<>();
-//        if (response != null && response.length() > 0) {
-//            try {
-//                JSONObject jsonObject = new JSONObject(response);
-//                JSONObject artistsObject = jsonObject.getJSONObject(KEY_ARTISTS);
-//                JSONArray arrayMusic = artistsObject.getJSONArray(KEY_ITEMS);
-//                for (int i = 0; i < arrayMusic.length(); i++) {
-//                    String id = NA;
-//                    String name = NA;
-//                    String urlThumbnail = NA;
-//                    JSONObject currentMusic = arrayMusic.getJSONObject(i);
-//
-//                    if (Utils.contains(currentMusic, KEY_NAME)) {
-//                        name = currentMusic.getString(KEY_NAME);
-//                    }
-//                    if (Utils.contains(currentMusic, KEY_ID)) {
-//                        id = currentMusic.getString(KEY_ID);
-//                    }
-//
-//                    // Summary
-//
-//                    Music music = new Music();
-//                    music.setId(id);
-//                    music.setName(name);
-//
-//                    if (!id.equals(NA) && !name.equals(NA)) {
-//                        listMusics.add(music);
-//                    }
-//                }
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -199,19 +130,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (id == R.id.btn_search) {
             String keyWord = mEditTextSearch.getText().toString();
             searchAndGetArtists(keyWord);
+
+            // RecyclerView onClick
+            ItemClickSupport.addTo(mSearchLists).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                @Override
+                public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                    Toast.makeText(getApplicationContext(), position + " has click", Toast.LENGTH_SHORT).show();
+                }
+
+            });
+
+            // RecyclerView onClick
+            ItemClickSupport.addTo(mSearchLists).setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
+
+                @Override
+                public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
+                    Toast.makeText(getApplicationContext(), position + " has long click", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            });
+
         }
     }
-
-//    @Override
-//    public void onClick(View v) {
-//        String input = mEditTextSearch.getText().toString();
-//        input = input.replace(" ", "%20");
-//        String url = UrlSearchBasic + input + UrlSearchTypeArtist;
-//        Log.d("Bojie", url);
-//        try {
-//            getSearchJSON(url);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 }
