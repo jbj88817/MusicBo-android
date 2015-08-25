@@ -1,17 +1,33 @@
 package com.bojie.musicbo;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import kaaes.spotify.webapi.android.SpotifyApi;
+import kaaes.spotify.webapi.android.SpotifyService;
+
 public class Top10TracksActivity extends AppCompatActivity {
+
+    private SpotifyService mSpotify;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top10_tracks);
+
+        SpotifyApi api = new SpotifyApi();
+        mSpotify = api.getService();
+
+        Intent intent = getIntent();
+        String id = intent.getStringExtra(getString(R.string.KEY_ID));
+        Log.d("!!!", id);
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

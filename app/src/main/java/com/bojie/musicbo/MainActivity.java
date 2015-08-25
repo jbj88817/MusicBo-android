@@ -1,5 +1,6 @@
 package com.bojie.musicbo;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SearchAdapter mSearchAdapter;
     private ArrayList<Music> mListMusic;
 
-    SpotifyService mSpotify;
+    private SpotifyService mSpotify;
 
     //private String mJSONResponse = "";
 
@@ -135,21 +135,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ItemClickSupport.addTo(mSearchLists).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                 @Override
                 public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                    Toast.makeText(getApplicationContext(), position + " has click", Toast.LENGTH_SHORT).show();
+                    String id = mListMusic.get(position).getId();
+                    Intent intent = new Intent(MainActivity.this, Top10TracksActivity.class);
+                    intent.putExtra(getString(R.string.KEY_ID), id);
+                    startActivity(intent);
                 }
 
             });
 
-            // RecyclerView onClick
-            ItemClickSupport.addTo(mSearchLists).setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
-
-                @Override
-                public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
-                    Toast.makeText(getApplicationContext(), position + " has long click", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-            });
-
+            // RecyclerView onLongClick
+//            ItemClickSupport.addTo(mSearchLists).setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
+//
+//                @Override
+//                public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
+//                    Toast.makeText(getApplicationContext(), position + " has long click", Toast.LENGTH_SHORT).show();
+//                    return true;
+//                }
+//            });
         }
     }
 }
