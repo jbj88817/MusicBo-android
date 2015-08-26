@@ -16,7 +16,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_toLeftOf="@+id/btn_search"
-        android:layout_toStartOf="@+id/btn_search"/>
+        android:layout_toStartOf="@+id/btn_search"
+        android:hint="@string/hint_artist_name"/>
 
     <Button
         android:layout_width="wrap_content"

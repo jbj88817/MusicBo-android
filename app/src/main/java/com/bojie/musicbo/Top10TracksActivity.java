@@ -143,5 +143,4 @@ public class Top10TracksActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    
 }

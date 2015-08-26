@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             protected Void doInBackground(String... keyWord) {
 
-
+                mListMusic = new ArrayList<>();
                 ArtistsPager artistsPager = mSpotify.searchArtists(keyWord[0]);
                 Pager<Artist> PagerArtists = artistsPager.artists;
                 List<Artist> artistList = PagerArtists.items;
