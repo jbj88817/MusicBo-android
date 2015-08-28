@@ -1,5 +1,6 @@
 package com.bojie.musicbo;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<Music> mListMusic;
 
     private SpotifyService mSpotify;
+    ProgressDialog mProgressDialog;
 
 
     @Override
@@ -81,6 +83,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         new AsyncTask<String, Void, Void>() {
 
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mProgressDialog= new ProgressDialog(MainActivity.this);
+                mProgressDialog.setTitle("Searching");
+                mProgressDialog.setMessage("Please wait while searching...");
+                mProgressDialog.show();
+            }
+
+            @Override
             protected Void doInBackground(String... keyWord) {
 
                 mListMusic = new ArrayList<>();
@@ -113,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
                 mSearchAdapter.setMusics(mListMusic);
+                mProgressDialog.dismiss();
             }
         }.execute(keyWord);
     }
