@@ -58,7 +58,7 @@ public class StreamerActivityFragment extends Fragment {
             mTrackName.setText(trackName);
             Picasso.with(getContext())
                     .load(urlAlbumArtwork)
-                    .placeholder(R.drawable.no_image_available)
+                    .placeholder(R.drawable.image_placeholder)
                     .into(mAlbumArtwork);
 
             mUrlPreview = intent.getStringExtra(getString(R.string.KEY_PREVIEW_URL));

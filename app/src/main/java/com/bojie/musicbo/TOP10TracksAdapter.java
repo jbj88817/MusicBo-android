@@ -47,7 +47,7 @@ public class Top10TracksAdapter extends RecyclerView.Adapter<Top10TracksAdapter.
             viewHolderMusic.albumTextView.setText(currentMusic.getAlbumName());
             Picasso.with(mContext)
                     .load(currentMusic.getUrlSmallThumbnail())
-                    .placeholder(R.drawable.no_image_available)
+                    .placeholder(R.drawable.image_placeholder)
                     .into(viewHolderMusic.musicThumbnail);
         }
     }
