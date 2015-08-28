@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +26,7 @@ public class Top10TracksActivity extends AppCompatActivity {
     private Top10TracksAdapter mTop10TracksAdapter;
     private ArrayList<Music> mListMusic;
     private SpotifyService mSpotify;
+    private String mArtistName;
 
 
     @Override
@@ -50,6 +50,7 @@ public class Top10TracksActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String id = intent.getStringExtra(getString(R.string.KEY_ID));
+        mArtistName = intent.getStringExtra(getString(R.string.KEY_ARTIST_NAME));
 
         if (savedInstanceState != null) {
             mListMusic = savedInstanceState.getParcelableArrayList(getString(R.string.STATE_TRACK));
@@ -62,11 +63,17 @@ public class Top10TracksActivity extends AppCompatActivity {
         ItemClickSupport.addTo(mTrackLists).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Toast.makeText(getApplicationContext(), position + " clicked", Toast.LENGTH_SHORT).show();
-//                String id = mListMusic.get(position).getId();
-//                Intent intent = new Intent(Top10TracksActivity.this, Top10TracksActivity.class);
-//                intent.putExtra(getString(R.string.KEY_ID), id);
-//                startActivity(intent);
+                String albumName = mListMusic.get(position).getAlbumName();
+                String urlAlbumArtwork = mListMusic.get(position).getUrlLargeThumbnail();
+                String trackName = mListMusic.get(position).getTrackName();
+                String urlPreview = mListMusic.get(position).getUrlPreview();
+                Intent intent = new Intent(Top10TracksActivity.this, StreamerActivity.class);
+                intent.putExtra(getString(R.string.KEY_ARTIST_NAME), mArtistName);
+                intent.putExtra(getString(R.string.KEY_ALBUM_NAME), albumName);
+                intent.putExtra(getString(R.string.KEY_ALBUM_ARTWORK), urlAlbumArtwork);
+                intent.putExtra(getString(R.string.KEY_TRACK_NAME), trackName);
+                intent.putExtra(getString(R.string.KEY_PREVIEW_URL), urlPreview);
+                startActivity(intent);
             }
         });
 
@@ -88,7 +95,8 @@ public class Top10TracksActivity extends AppCompatActivity {
 
                 Tracks tracks = mSpotify.getArtistTopTrack(id[0], getString(R.string.COUNTRY_CODE));
                 List<Track> listOfTrack = tracks.tracks;
-                String dummyImageUri = "";
+                String dummySmallImageUri = "";
+                String dummyLargeImageUri = "";
 
                 for (Track track : listOfTrack) {
                     Music music = new Music();
@@ -98,12 +106,16 @@ public class Top10TracksActivity extends AppCompatActivity {
                     String albumName = album.name;
                     music.setAlbumName(albumName);
                     List<Image> listOfImage = album.images;
-                    if (listOfImage.size() > 0 && listOfImage.get(2) != null) {
-                        String ImageUri = listOfImage.get(1).url;
-                        music.setUrlSmallThumbnail(ImageUri);
-                        dummyImageUri = ImageUri;
+                    if (listOfImage.size() > 0 && listOfImage.get(1) != null && listOfImage.get(0) != null) {
+                        String imageSmallUri = listOfImage.get(1).url;
+                        String imageLargeUri = listOfImage.get(0).url;
+                        music.setUrlSmallThumbnail(imageSmallUri);
+                        music.setUrlLargeThumbnail(imageLargeUri);
+                        dummySmallImageUri = imageSmallUri;
+                        dummyLargeImageUri = imageLargeUri;
                     } else {
-                        music.setUrlSmallThumbnail(dummyImageUri);
+                        music.setUrlSmallThumbnail(dummySmallImageUri);
+                        music.setUrlLargeThumbnail(dummyLargeImageUri);
                     }
                     String urlPreview = track.preview_url;
                     music.setUrlPreview(urlPreview);

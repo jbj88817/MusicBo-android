@@ -154,8 +154,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                     String id = mListMusic.get(position).getId();
+                    String artistName = mListMusic.get(position).getArtistName();
                     Intent intent = new Intent(MainActivity.this, Top10TracksActivity.class);
                     intent.putExtra(getString(R.string.KEY_ID), id);
+                    intent.putExtra(getString(R.string.KEY_ARTIST_NAME), artistName);
                     startActivity(intent);
                 }
 

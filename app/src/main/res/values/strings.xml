@@ -10,6 +10,11 @@
 
     <!--KEYS-->
     <string name="KEY_ID">ID</string>
+    <string name="KEY_ARTIST_NAME">ARTIST_NAME</string>
+    <string name="KEY_ALBUM_NAME">ALBUM_NAME</string>
+    <string name="KEY_ALBUM_ARTWORK">ALBUM_ARTWORK</string>
+    <string name="KEY_TRACK_NAME">TRACK_NAME</string>
+    <string name="KEY_PREVIEW_URL">PREVIEW_URL</string>
     <string name="STATE_MUSIC">STATE_MUSIC</string>
     <string name="STATE_TRACK">STATE_TRACK</string>
 

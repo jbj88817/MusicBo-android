@@ -38,4 +38,6 @@ dependencies {
     compile 'com.android.support:design:23.0.0'
     compile(name:'spotify-web-api-android-0.1.1', ext:'aar')
     compile 'com.spotify.sdk:spotify-auth:1.0.0-beta10@aar'
+    compile 'com.jakewharton:butterknife:7.0.1'
+
 }
