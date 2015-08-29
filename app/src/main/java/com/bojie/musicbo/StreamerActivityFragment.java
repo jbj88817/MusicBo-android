@@ -130,6 +130,12 @@ public class StreamerActivityFragment extends Fragment implements MediaPlayer.On
     @Override
     public void onStop() {
         super.onStop();
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         btnPlayPause.setImageResource(android.R.drawable.ic_media_play);
         mMediaPlayer.release();
     }
