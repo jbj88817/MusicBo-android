@@ -187,7 +187,24 @@ public class StreamerActivityFragment extends Fragment implements
             Toast.makeText(getActivity(), "There is no previous track.", Toast.LENGTH_SHORT).show();
         }
     }
-    
+
+    @OnClick(R.id.btn_next)
+    public void nextButton() {
+
+        if (mPosition != mMusicList.size() - 1) {
+            if (mMediaPlayer.isPlaying()) {
+                mMediaPlayer.stop();
+            }
+            mPosition++;
+            updatePlayerUI();
+            btnPlayPause.setImageResource(android.R.drawable.ic_media_play);
+            bufferMusic();
+            setSeekBar();
+        } else {
+            Toast.makeText(getActivity(), "There is no next track.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         btnPlayPause.setEnabled(true);
