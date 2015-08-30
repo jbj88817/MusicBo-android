@@ -6,12 +6,14 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -25,7 +27,10 @@ import butterknife.OnClick;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class StreamerActivityFragment extends Fragment implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener{
+public class StreamerActivityFragment extends Fragment implements
+        MediaPlayer.OnPreparedListener,
+        MediaPlayer.OnCompletionListener,
+        SeekBar.OnSeekBarChangeListener {
 
     @Bind(R.id.artist_name)
     TextView mArtistName;
@@ -37,10 +42,13 @@ public class StreamerActivityFragment extends Fragment implements MediaPlayer.On
     TextView mTrackName;
     @Bind(R.id.btn_play_pause)
     ImageButton btnPlayPause;
+    @Bind(R.id.track_bar)
+    SeekBar mTrackProgress;
 
     private String mUrlPreview;
-    MediaPlayer mMediaPlayer;
-    ProgressDialog mProgressDialog;
+    private MediaPlayer mMediaPlayer;
+    private ProgressDialog mProgressDialog;
+    private Handler mHandler;
 
     public StreamerActivityFragment() {
     }
@@ -58,6 +66,7 @@ public class StreamerActivityFragment extends Fragment implements MediaPlayer.On
         super.onActivityCreated(savedInstanceState);
         btnPlayPause.setEnabled(false);
 
+
         Intent intent = getActivity().getIntent();
         if (intent != null) {
             String artistName = intent.getStringExtra(getString(R.string.KEY_ARTIST_NAME));
@@ -74,12 +83,12 @@ public class StreamerActivityFragment extends Fragment implements MediaPlayer.On
 
             mUrlPreview = intent.getStringExtra(getString(R.string.KEY_PREVIEW_URL));
 
-            new AsyncTask<Void, Void, Void>(){
+            new AsyncTask<Void, Void, Void>() {
 
                 @Override
                 protected void onPreExecute() {
                     super.onPreExecute();
-                    mProgressDialog= new ProgressDialog(getActivity());
+                    mProgressDialog = new ProgressDialog(getActivity());
                     mProgressDialog.setTitle("Loading");
                     mProgressDialog.setMessage("Wait while loading...");
                     mProgressDialog.show();
@@ -109,11 +118,29 @@ public class StreamerActivityFragment extends Fragment implements MediaPlayer.On
     @OnClick(R.id.btn_play_pause)
     public void playOrPauseButton() {
         if (!mMediaPlayer.isPlaying()) {
-            if (mMediaPlayer.isPlaying()){
+            if (mMediaPlayer.isPlaying()) {
                 mMediaPlayer.pause();
             }
+
+            mTrackProgress.setOnSeekBarChangeListener(this);
+
             btnPlayPause.setImageResource(android.R.drawable.ic_media_pause);
             mMediaPlayer.start();
+
+            mHandler = new Handler(); //Make sure you update Seekbar on UI thread
+            getActivity().runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (mMediaPlayer != null) {
+                        int mCurrentPosition = mMediaPlayer.getCurrentPosition();
+                        mTrackProgress.setProgress(mCurrentPosition);
+                    }
+                    mHandler.postDelayed(this, 1000);
+                }
+            });
+
+
         } else {
             btnPlayPause.setImageResource(android.R.drawable.ic_media_play);
             mMediaPlayer.pause();
@@ -125,6 +152,7 @@ public class StreamerActivityFragment extends Fragment implements MediaPlayer.On
     public void onPrepared(MediaPlayer mediaPlayer) {
         btnPlayPause.setEnabled(true);
         mProgressDialog.dismiss();
+        mTrackProgress.setMax(mMediaPlayer.getDuration());
     }
 
     @Override
@@ -143,5 +171,22 @@ public class StreamerActivityFragment extends Fragment implements MediaPlayer.On
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
         btnPlayPause.setImageResource(android.R.drawable.ic_media_play);
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if(mMediaPlayer != null && fromUser){
+            mMediaPlayer.seekTo(progress);
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
     }
 }

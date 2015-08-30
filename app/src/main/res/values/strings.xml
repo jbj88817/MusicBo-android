@@ -21,7 +21,7 @@
 
     <string name="COUNTRY_CODE">US</string>
     <string name="hint_artist_name">Enter an artist name</string>
-    <string name="title_activity_streamer">Spotify Streamer</string>
+    <string name="title_activity_streamer">MusicBo Player</string>
 
     <!--Actions-->
     <string name="ACTION_PLAY">com.bojie.musicbo.PLAY</string>
