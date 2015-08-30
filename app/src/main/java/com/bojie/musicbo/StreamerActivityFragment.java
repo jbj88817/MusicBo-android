@@ -133,10 +133,15 @@ public class StreamerActivityFragment extends Fragment implements
                 @Override
                 public void run() {
                     if (mMediaPlayer != null) {
-                        int mCurrentPosition = mMediaPlayer.getCurrentPosition();
-                        mTrackProgress.setProgress(mCurrentPosition);
+                        try {
+                            int mCurrentPosition = mMediaPlayer.getCurrentPosition();
+                            mTrackProgress.setProgress(mCurrentPosition);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                     }
-                    mHandler.postDelayed(this, 1000);
+                    mHandler.postDelayed(this, 500);
                 }
             });
 
@@ -175,7 +180,7 @@ public class StreamerActivityFragment extends Fragment implements
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if(mMediaPlayer != null && fromUser){
+        if (mMediaPlayer != null && fromUser) {
             mMediaPlayer.seekTo(progress);
         }
     }
