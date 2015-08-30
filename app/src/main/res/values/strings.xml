@@ -15,8 +15,10 @@
     <string name="KEY_ALBUM_ARTWORK">ALBUM_ARTWORK</string>
     <string name="KEY_TRACK_NAME">TRACK_NAME</string>
     <string name="KEY_PREVIEW_URL">PREVIEW_URL</string>
+    <string name="KEY_TRACK_POSITION">TRACK_POSITION</string>
     <string name="STATE_MUSIC">STATE_MUSIC</string>
     <string name="STATE_TRACK">STATE_TRACK</string>
+    <string name="STATE_MUSIC_LIST">STATE_MUSIC_LIST</string>
 
 
     <string name="COUNTRY_CODE">US</string>

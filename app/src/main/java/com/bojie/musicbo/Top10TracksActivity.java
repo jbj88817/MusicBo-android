@@ -63,16 +63,10 @@ public class Top10TracksActivity extends AppCompatActivity {
         ItemClickSupport.addTo(mTrackLists).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                String albumName = mListMusic.get(position).getAlbumName();
-                String urlAlbumArtwork = mListMusic.get(position).getUrlLargeThumbnail();
-                String trackName = mListMusic.get(position).getTrackName();
-                String urlPreview = mListMusic.get(position).getUrlPreview();
                 Intent intent = new Intent(Top10TracksActivity.this, StreamerActivity.class);
                 intent.putExtra(getString(R.string.KEY_ARTIST_NAME), mArtistName);
-                intent.putExtra(getString(R.string.KEY_ALBUM_NAME), albumName);
-                intent.putExtra(getString(R.string.KEY_ALBUM_ARTWORK), urlAlbumArtwork);
-                intent.putExtra(getString(R.string.KEY_TRACK_NAME), trackName);
-                intent.putExtra(getString(R.string.KEY_PREVIEW_URL), urlPreview);
+                intent.putParcelableArrayListExtra(getString(R.string.STATE_MUSIC_LIST), mListMusic);
+                intent.putExtra(getString(R.string.KEY_TRACK_POSITION),position);
                 startActivity(intent);
             }
         });
