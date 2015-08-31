@@ -44,10 +44,24 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         Music currentMusic = mMusics.get(position);
         if (currentMusic != null) {
             viewHolderMusic.musicSearchResult.setText(currentMusic.getArtistName());
-            Picasso.with(mContext)
-                    .load(currentMusic.getUrlArtistThumbnail())
-                    .placeholder(R.drawable.image_placeholder)
-                    .into(viewHolderMusic.musicThumbnail);
+            String urlArtistThumbnail = currentMusic.getUrlArtistThumbnail();
+            if (urlArtistThumbnail == null && urlArtistThumbnail.isEmpty()) {
+                Picasso.with(mContext)
+                        .load(R.drawable.no_image_available)
+                        .into(viewHolderMusic.musicThumbnail);
+            } else {
+                try {
+                    Picasso.with(mContext)
+                            .load(urlArtistThumbnail)
+                            .placeholder(R.drawable.image_placeholder)
+                            .into(viewHolderMusic.musicThumbnail);
+                } catch (IllegalArgumentException e){
+                    Picasso.with(mContext)
+                            .load(R.drawable.no_image_available)
+                            .into(viewHolderMusic.musicThumbnail);
+                }
+
+            }
         }
     }
 

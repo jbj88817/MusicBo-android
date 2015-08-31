@@ -161,8 +161,8 @@ public class StreamerActivityFragment extends Fragment implements
                     try {
                         int mCurrentPosition = mMediaPlayer.getCurrentPosition();
                         mTrackProgress.setProgress(mCurrentPosition);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } catch (IllegalStateException e) {
+
                     }
 
                 }
